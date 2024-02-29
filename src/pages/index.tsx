@@ -1,13 +1,21 @@
-import { Plus_Jakarta_Sans } from "next/font/google";
-
-const plusJakartaSans = Plus_Jakarta_Sans({ subsets: ["latin"] });
+import { useRouter } from "next/router";
+import RegisterPage from "./auth/register";
+import { useEffect } from "react";
 
 export default function Home() {
+  const router = useRouter();
+
+  useEffect(() => {
+    const isAuthenticated = false;
+
+    if (!isAuthenticated) {
+      router.push("/auth/register");
+    }
+  }, []);
+
   return (
-    <main
-      className={`flex min-h-screen flex-col items-center justify-between p-24 ${plusJakartaSans.className}`}
-    >
-      <div>HomePage</div>
+    <main>
+      <RegisterPage />
     </main>
   );
 }

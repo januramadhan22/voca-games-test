@@ -14,11 +14,13 @@ const config: Config = {
           orange: "#D38122",
           grey: "#666666",
           red: "#DC2626",
+          black: "#4C4C4C",
         },
         secondary: {
+          blue: "#20184E",
           grey: "#F2F2F2",
         },
-        transparent: {
+        soft: {
           blue: "#E5E7FD",
           orange: "rgba(211, 119, 34, 0.22)",
         },
