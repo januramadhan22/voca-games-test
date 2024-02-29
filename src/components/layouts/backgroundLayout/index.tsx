@@ -8,7 +8,7 @@ import Image from "next/image";
 
 type PropsType = {
   children: React.ReactNode;
-  fullHeight: boolean;
+  fullHeight?: boolean;
 };
 
 const BackgroundLayout = (props: PropsType) => {

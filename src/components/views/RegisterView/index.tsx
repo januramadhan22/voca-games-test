@@ -69,7 +69,7 @@ const RegisterView = () => {
 
   return (
     <div className="w-full min-h-screen flex flex-col relative">
-      <Navbar />
+      <Navbar fixed />
       <BackgroundLayout fullHeight={true}>
         <header className="max-w-lg w-full flex flex-col gap-5  text-secondary-grey">
           <h1 className="text-[64px] font-extrabold">Daftarkan Akun</h1>
@@ -81,18 +81,21 @@ const RegisterView = () => {
         {/* Form Element */}
         <div className="max-w-lg w-full flex flex-col gap-5  text-secondary-grey">
           <TextInput
+            variant="light"
             label="Nama Anda"
             name="name"
             placeholder="Ketik nama anda disini.."
             handleChange={handleChangeInput}
           />
           <TextInput
+            variant="light"
             label="Nomor Handphone"
             name="phonenumber"
             placeholder="Nomor handphone anda"
             handleChange={handleChangeInput}
           />
           <PasswordInput
+            variant="light"
             label="Password"
             name="password"
             placeholder="Masukkan password anda"
@@ -103,6 +106,7 @@ const RegisterView = () => {
             handleChange={handleChangeInput}
           />
           <PasswordInput
+            variant="light"
             label="Konfirmasi Password"
             name="confirmPassword"
             placeholder="Masukkan kembali password anda"

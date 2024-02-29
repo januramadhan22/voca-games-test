@@ -22,7 +22,14 @@ const CustomSwitch = styled(Switch)(({ theme, checked }) => ({
     backgroundColor: !checked ? blue[600] : orange[600],
   },
 }));
-const Navbar = () => {
+
+type PropsType = {
+  fixed?: boolean;
+};
+
+const Navbar = (props: PropsType) => {
+  const { fixed } = props;
+
   const [checked, setChecked] = useState<boolean>(false);
 
   const handleChange = () => {
@@ -31,7 +38,9 @@ const Navbar = () => {
 
   return (
     <nav
-      className={`sticky top-0 z-[100] w-full px-[14px] py-[10px] flex justify-center md:justify-end items-center gap-2 text-[18px] font-bold bg-white`}
+      className={`${
+        fixed ? "sticky  top-0" : "relative"
+      } z-[100] w-full px-[14px] py-[10px] flex justify-center md:justify-end items-center gap-2 text-[18px] font-bold bg-white`}
     >
       <p className={!checked ? "text-primary-blue" : "text-primary-black"}>
         Blue

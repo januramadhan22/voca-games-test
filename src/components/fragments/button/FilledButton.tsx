@@ -5,7 +5,7 @@ type PropsType = {
   variant: string;
   size?: string;
   icon?: boolean;
-  onSubmit: () => void;
+  onSubmit?: () => void;
 };
 
 const FilledButton = (props: PropsType) => {
