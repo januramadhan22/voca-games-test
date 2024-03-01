@@ -7,9 +7,13 @@ import BackgroundLayout from "@/components/layouts/backgroundLayout";
 import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
+import { FormProvider, useForm } from "react-hook-form";
 
 const LoginView = () => {
   const { push, query } = useRouter();
+  const method = useForm();
+  const { errors } = method.formState;
+
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [formData, setFormData] = useState({
@@ -26,16 +30,15 @@ const LoginView = () => {
     setFormData({ ...formData, [event.target.name]: event.target.value });
   };
 
-  const handleSignIn = async () => {
+  const handleSignIn = async (data: any) => {
     setIsLoading(true);
     try {
       const response = await signIn("credentials", {
         redirect: false,
-        name: formData.username,
-        password: formData.password,
+        name: data.username,
+        password: data.password,
         callbackUrl,
       });
-      console.log(response);
 
       setIsLoading(false);
       // if (!response?.error) {
@@ -64,33 +67,58 @@ const LoginView = () => {
             </p>
           </header>
 
-          {/* Form Element */}
-          <div className="max-w-lg w-full flex flex-col gap-5  text-secondary-grey">
-            <TextInput
-              variant="dark"
-              label="Username"
-              name="username"
-              placeholder="Username anda.."
-              handleChange={handleChangeInput}
-            />
-            <PasswordInput
-              variant="dark"
-              label="Password"
-              name="password"
-              placeholder="Password anda.."
-              showPassword={showPassword}
-              handleShowPassword={handleShowPassword}
-              handleChange={handleChangeInput}
-            />
-          </div>
+          <FormProvider {...method}>
+            {/* Form Element */}
+            <div className="max-w-lg w-full flex flex-col gap-5  text-secondary-grey">
+              <TextInput
+                variant="dark"
+                label="Username"
+                name="username"
+                placeholder="Username anda.."
+                rules={{
+                  required: "Username is required",
+                  minLength: {
+                    value: 3,
+                    message: "Min have 3 characters",
+                  },
+                }}
+              />
+              <PasswordInput
+                variant="dark"
+                label="Password"
+                name="password"
+                placeholder="Password anda.."
+                showPassword={showPassword}
+                handleShowPassword={handleShowPassword}
+                rules={{
+                  required: "Password is required",
+                  minLength: {
+                    value: 4,
+                    message: "Min have 4 characters",
+                  },
+                  maxLength: {
+                    value: 12,
+                    message: "Max have 12 characters",
+                  },
+                }}
+              />
+            </div>
+          </FormProvider>
 
           {/* Action Element */}
-          <div className="max-w-lg w-full flex flex-col items-center gap-10">
+          <form
+            onSubmit={method.handleSubmit(handleSignIn)}
+            className="max-w-lg w-full flex flex-col items-center gap-10"
+          >
             <FilledButton
+              disabled={
+                Object.keys(errors).length > 0 ||
+                method.watch("username", "") === "" ||
+                method.watch("password", "") === ""
+              }
               label={isLoading ? "Loading..." : "Masuk Sekarang"}
               variant="primary"
               size="medium"
-              onSubmit={handleSignIn}
             />
             <span className="text-lg font-bold text-primary-grey flex gap-1">
               Belum punya akun?{" "}
@@ -101,7 +129,7 @@ const LoginView = () => {
                 onSubmit={() => push("/auth/register")}
               />
             </span>
-          </div>
+          </form>
         </div>
       </div>
     </div>
