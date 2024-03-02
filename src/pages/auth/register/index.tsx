@@ -1,4 +1,5 @@
 import RegisterView from "@/components/views/RegisterView";
+import withAuth from "@/middlewares/withAuth";
 import React from "react";
 
 const RegisterPage = () => {
@@ -9,4 +10,4 @@ const RegisterPage = () => {
   );
 };
 
-export default RegisterPage;
+export default withAuth(RegisterPage);

@@ -4,30 +4,33 @@ import PasswordInput from "@/components/fragments/form/PasswordInput";
 import TextInput from "@/components/fragments/form/TextInput";
 import Navbar from "@/components/fragments/navbar";
 import BackgroundLayout from "@/components/layouts/backgroundLayout";
+import {
+  setAuthorized,
+  setUserData,
+} from "@/lib/redux/reducers/user/userSlice";
+import { AppDispatch, RootState } from "@/lib/redux/store/store";
 import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
+import { useDispatch, useSelector } from "react-redux";
+import Cookies from "js-cookie";
+import withAuth from "@/middlewares/withAuth";
 
 const LoginView = () => {
+  const session = useSession();
   const { push, query } = useRouter();
+  const dispatch = useDispatch<AppDispatch>();
   const method = useForm();
   const { errors } = method.formState;
 
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [formData, setFormData] = useState({
-    username: "",
-    password: "",
-  });
+
   const callbackUrl: any = query.callbackUrl || "/";
 
   const handleShowPassword = () => {
     setShowPassword(!showPassword);
-  };
-
-  const handleChangeInput = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, [event.target.name]: event.target.value });
   };
 
   const handleSignIn = async (data: any) => {
@@ -41,11 +44,20 @@ const LoginView = () => {
       });
 
       setIsLoading(false);
-      // if (!response?.error) {
-      //   alert("Login successfully");
-      // } else {
-      //   alert("Username or password is incorrect");
-      // }
+      if (!response?.error) {
+        alert("Login successfully");
+        if (session) {
+          dispatch(setUserData(session?.data?.user));
+          dispatch(setAuthorized(true));
+          Cookies.set("user", JSON.stringify(session?.data?.user), {
+            expires: 1 / 24,
+            path: "/",
+            sameSite: "strict",
+          });
+        }
+      } else {
+        alert("Username or password is incorrect");
+      }
     } catch (error) {
       setIsLoading(false);
       alert("Username or password is incorrect");
@@ -53,8 +65,19 @@ const LoginView = () => {
   };
 
   return (
-    <div className="w-full min-h-screen flex relative">
-      <BackgroundLayout>asdad</BackgroundLayout>
+    <div className="w-full min-h-screen flex flex-col-reverse lg:flex-row relative">
+      <BackgroundLayout>
+        <div className="w-full px-10 flex flex-col items-center gap-20">
+          <div className="w-[60%] text-center text-secondary-grey">
+            <h1 className="text-[48px] font-bold">Title</h1>
+            <p>
+              {
+                "'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Sed, vitae praesentium? Beatae ea praesentium fuga quis nemo quibusdam quia quaerat?'"
+              }
+            </p>
+          </div>
+        </div>
+      </BackgroundLayout>
       <div className="w-full h-full flex flex-col items-center">
         <Navbar fixed />
         <div className="max-w-[80%] h-full py-10 flex flex-col justify-center items-center gap-10">
@@ -120,7 +143,7 @@ const LoginView = () => {
               variant="primary"
               size="medium"
             />
-            <span className="text-lg font-bold text-primary-grey flex gap-1">
+            <span className="text-lg font-bold text-primary-grey flex flex-col md:flex-row gap-1">
               Belum punya akun?{" "}
               <TextButton
                 variant="primary"
@@ -136,4 +159,4 @@ const LoginView = () => {
   );
 };
 
-export default LoginView;
+export default withAuth(LoginView);

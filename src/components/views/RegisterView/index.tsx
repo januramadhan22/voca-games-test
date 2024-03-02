@@ -60,7 +60,7 @@ const RegisterView = () => {
     <div className="w-full min-h-screen flex flex-col relative">
       <Navbar fixed />
       <BackgroundLayout fullHeight={true}>
-        <header className="max-w-lg w-full flex flex-col gap-5  text-secondary-grey">
+        <header className="max-w-lg w-full px-10 flex flex-col gap-5  text-secondary-grey">
           <h1 className="text-[64px] font-extrabold">Daftarkan Akun</h1>
           <p className="text-lg">
             Daftar akun anda dengan mengisi form dibawah
@@ -69,7 +69,7 @@ const RegisterView = () => {
 
         <FormProvider {...method}>
           {/* Form Element */}
-          <div className="max-w-lg w-full flex flex-col gap-5  text-secondary-grey">
+          <div className="max-w-lg w-full px-10 flex flex-col gap-5  text-secondary-grey">
             <TextInput
               variant="light"
               label="Nama Anda"
@@ -143,7 +143,7 @@ const RegisterView = () => {
           {/* Action Element */}
           <form
             onSubmit={method.handleSubmit(handleSignUp)}
-            className="max-w-lg w-full flex flex-col items-center gap-10"
+            className="max-w-lg w-full px-10 flex flex-col items-center gap-10"
           >
             <FilledButton
               disabled={

@@ -1,22 +1,20 @@
 import { useRouter } from "next/router";
-import RegisterPage from "./auth/register";
 import { useEffect } from "react";
+import Cookies from "js-cookie";
 import { useSession } from "next-auth/react";
 
 export default function Home() {
   const router = useRouter();
+  const { status } = useSession();
+  const userCookies = Cookies.get("user");
 
   useEffect(() => {
-    const isAuthenticated = false;
-
-    if (!isAuthenticated) {
+    if (userCookies && status === "authenticated") {
+      router.push("/profile");
+    } else if (!userCookies && status === "unauthenticated") {
       router.push("/auth/register");
     }
-  }, []);
+  }, [userCookies, status, router]);
 
-  return (
-    <main>
-      <RegisterPage />
-    </main>
-  );
+  return <main />;
 }

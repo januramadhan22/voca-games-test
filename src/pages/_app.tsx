@@ -1,3 +1,4 @@
+import Providers from "@/lib/redux/Provider";
 import "@/styles/globals.css";
 import { SessionProvider } from "next-auth/react";
 import type { AppProps } from "next/app";
@@ -12,9 +13,11 @@ export default function App({
 }: AppProps) {
   return (
     <SessionProvider session={session}>
-      <div className={plusJakartaSans.className}>
-        <Component {...pageProps} />
-      </div>
+      <Providers>
+        <div className={plusJakartaSans.className}>
+          <Component {...pageProps} />
+        </div>
+      </Providers>
     </SessionProvider>
   );
 }
